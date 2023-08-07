@@ -27,7 +27,7 @@ Before you start, ensure you have the following installed:
 
    ```sh
    git clone git@github.com:Mubeyd/graphQl-Api-Postgres.git
-   cd graphQlApiPostgres
+   cd graphQl-Api-Postgres
    ```
 
    

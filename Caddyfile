@@ -1,0 +1,7 @@
+# Replace your-domain.com with your application's domain
+# web-server-api is a subdomain of your-domain.com
+web-server-api.your-domain.com {
+    reverse_proxy graph-ql-api-postgres-node:4000 {
+        header_down Strict-Transport-Security max-age=31536000;
+    }
+}

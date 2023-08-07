@@ -1,0 +1,250 @@
+{
+	"info": {
+		"_postman_id": "5182c2f3-e0dd-4d0c-9f4b-01c551217a97",
+		"name": "graph-ql-api-postgres web server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14843702"
+	},
+	"item": [
+		{
+			"name": "Message",
+			"item": [
+				{
+					"name": "Create message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateMessage($input: CreateMessageInput!) {\n  createMessage(input: $input) {\n    id\n    body\n    user {\n      id\n      username\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"body\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra ornare nibh, eget molestie dolor imperdiet at. Integer in suscipit tellus. Sed mi nulla, consectetur in pellentesque et, volutpat quis mauris.\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Messages",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Messages {\n  messages {\n    id\n    body\n    createdAt\n    user {\n      id\n      username\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Message subscriptions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "subscription NewMessage($input: NewMessageSubscriptionInput!){\n  newMessage(input: $input){\n    _id\n  }\n}",
+								"variables": "{\n    \"input\":{}\n}"
+							}
+						},
+						"url": {
+							"raw": "{{wsHost}}",
+							"host": [
+								"{{wsHost}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Login($input: LoginInput!) {\n  login(input: $input)\n}",
+								"variables": "{\n  \"input\": {\n    \"password\": \"{{password}}\",\n    \"usernameOrEmail\": \"{{email}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const username = pm.variables.replaceIn('{{$randomUserName}}')",
+									"const password = pm.variables.replaceIn('{{$randomPassword}}')",
+									"",
+									"let firstName = pm.variables.replaceIn(\"{{$randomFirstName}}\")",
+									"let lastName = pm.variables.replaceIn(\"{{$randomFirstName}}\")",
+									"",
+									"pm.environment.set(\"firstName\", firstName)",
+									"",
+									"pm.environment.set(\"lastName\", lastName)",
+									"",
+									"postman.setEnvironmentVariable(\"username\", username);",
+									"postman.setEnvironmentVariable(\"email\", `${username}@example.com`);",
+									"postman.setEnvironmentVariable(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Register($input: RegisterUserInput!) {\n  register(input: $input) {\n    username\n    email\n  }\n}\n",
+								"variables": "{\n  \"input\": {\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\",\n    \"username\": \"{{username}}\",\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Users {\n  users {\n    id\n    username\n    email\n    messages {\n        id\n        body\n    }\n  }\n}\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Me {\n  me {\n    id\n    username\n    email\n  }\n}\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query User($input: FindUserInput!) {\n  user(input: $input) {\n    id\n    username\n    email\n    messages {\n        body\n    }\n  }\n}\n",
+								"variables": "{\n  \"input\": {\n    \"username\": \"{{username}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "wsHost",
+			"value": "lol"
+		}
+	]
+}
